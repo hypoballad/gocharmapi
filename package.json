@@ -1,0 +1,28 @@
+{
+  "name": "gocharmapi",
+  "version": "1.0.0",
+  "description": "API to scrape 5ch and return json",
+  "main": "gocharmapi.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hypoballad/gocharmapi.git"
+  },
+  "keywords": [
+    "5ch"
+  ],
+  "author": "hypoballad@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hypoballad/gocharmapi/issues"
+  },
+  "homepage": "https://github.com/hypoballad/gocharmapi#readme",
+  "dependencies": {
+    "basic-auth-connect": "^1.0.0",
+    "command-line-args": "^5.1.1",
+    "express": "^4.17.1",
+    "puppeteer-core": "^1.20.0"
+  }
+}
