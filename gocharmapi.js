@@ -43,7 +43,9 @@
     console.log(options)
     const port = options.port
     
-    app.use(basicAuth(options.user, options.passwd))
+    if (!options.debug) {
+        app.use(basicAuth(options.user, options.passwd))
+    }
 
     const browser = await puppeteer.launch({args: ['--no-sandbox'], executablePath: options.chrome})
     const page = await browser.newPage()
@@ -63,11 +65,12 @@
 
     const scrapeSubject = async (target) => {
         await page.goto(target);
-    
+        
         const elem = await page.evaluate(() => {
             const schedules = Array.from(document.querySelectorAll('body > div.THREAD_MENU > div > p'))
+            let regex = /l50$/g
             return schedules.map(el => (
-                {thread: el.querySelector('a:nth-child(1)').getAttribute('href'), 
+                {thread: el.querySelector('a:nth-child(1)').getAttribute('href').replace(regex, ''), 
                  title: el.querySelector('a:nth-child(1)').textContent}))
         })
         return elem
@@ -96,6 +99,9 @@
 
     app.get('/subject/:target', (req, res) => {
         res.header('Content-Type', 'application/json; charset=utf-8')
+        if (options.debug) {
+            console.log(req.params.target)
+        }
         el = scrapeSubject(req.params.target)
         el.then(e => res.send(e))
     })
@@ -105,6 +111,9 @@
         let u = url.parse(req.params.target)
         let base = req.params.target.slice(0, u.path.length * -1)
         let thread = base + req.params.thread
+        if (options.debug) {
+            console.log(thread)
+        }
         el = scrapeThread(thread)
         el.then(e => res.send(e))
     })
